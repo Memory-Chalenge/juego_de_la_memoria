@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Memory Challenge</title>
+
+    <link rel="stylesheet" href="css/prototipo.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- =========================
+         PANTALLA DE INICIO
+    ========================== -->
+
+    <section id="homeScreen" class="screen active">
+
+        <div class="logo">🎮</div>
+
+        <h1>MEMORY CHALLENGE</h1>
+
+        <p class="subtitle">
+            Pon a prueba tu memoria y concentración
+        </p>
+
+        <div class="menu-buttons">
+
+            <button class="btn play-btn" onclick="showDifficulty()">
+                JUGAR
+            </button>
+
+            <button class="btn menu-btn" onclick="showOptions()">
+                ⚙️ OPCIONES
+            </button>
+
+            <button class="btn menu-btn" onclick="showRanking()">
+                🏆 CLASIFICACIÓN
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         DIFICULTAD
+    ========================== -->
+
+    <section id="difficultyScreen" class="screen">
+
+        <h1>ELIGE LA DIFICULTAD</h1>
+
+        <p class="subtitle">
+            Selecciona el nivel que quieras jugar
+        </p>
+
+        <div class="difficulty-container">
+
+            <div class="difficulty" onclick="startGame(3,4)">
+                <div class="difficulty-icon">🌟</div>
+                <h3>FÁCIL</h3>
+                <p>3 × 4</p>
+                <small>12 cartas</small>
+            </div>
+
+
+            <div class="difficulty" onclick="startGame(4,5)">
+                <div class="difficulty-icon">🔥</div>
+                <h3>MEDIO</h3>
+                <p>4 × 5</p>
+                <small>20 cartas</small>
+            </div>
+
+
+            <div class="difficulty" onclick="startGame(5,6)">
+                <div class="difficulty-icon">👑</div>
+                <h3>DIFÍCIL</h3>
+                <p>5 × 6</p>
+                <small>30 cartas</small>
+            </div>
+
+        </div>
+
+        <br>
+
+        <button class="btn menu-btn" onclick="goHome()">
+            ⬅ VOLVER
+        </button>
+
+    </section>
+
+
+    <!-- =========================
+         PANTALLA DEL JUEGO
+    ========================== -->
+
+    <section id="gameScreen" class="screen">
+
+        <div class="game-header">
+
+            <div class="info-box">
+                ⏱ Tiempo:
+                <span id="timer">00:00</span>
+            </div>
+
+            <div class="info-box">
+                🃏 Movimientos:
+                <span id="moves">0</span>
+            </div>
+
+            <div class="info-box">
+                🎯 Nivel:
+                <span id="levelText">Fácil</span>
+            </div>
+
+        </div>
+
+
+        <div id="gameBoard" class="game-board"></div>
+
+
+        <div id="gameMessage" class="message"></div>
+
+
+        <div class="game-buttons">
+
+            <button class="btn small-btn" onclick="restartGame()">
+                🔄 REINICIAR
+            </button>
+
+            <button class="btn small-btn" onclick="goHome()">
+                🏠 MENÚ
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         CLASIFICACIÓN
+    ========================== -->
+
+    <section id="rankingScreen" class="screen">
+
+        <h1>🏆 CLASIFICACIÓN</h1>
+
+        <p class="subtitle">
+            Tus mejores resultados
+        </p>
+
+        <div id="rankingList" class="ranking-box"></div>
+
+        <button class="btn menu-btn" onclick="goHome()">
+            ⬅ VOLVER
+        </button>
+
+    </section>
+
+
+    <!-- =========================
+         OPCIONES
+    ========================== -->
+
+    <section id="optionsScreen" class="screen">
+
+        <h1>⚙️ OPCIONES</h1>
+
+        <div class="options-box">
+
+            <div class="option">
+    <label for="musicToggle">Música de fondo:</label>
+
+    <select id="musicToggle">
+        <option value="on">Activada</option>
+        <option value="off">Desactivada</option>
+    </select>
+</div>
+
+<div class="option">
+    <label for="volume">Volumen de música:</label>
+
+    <input
+        type="range"
+        id="volume"
+        min="0"
+        max="100"
+        value="30"
+    >
+
+    <span id="volumeValue">30%</span>
+</div>
+
+<audio id="backgroundMusic" loop>
+    <source src="audio/musica.mp3" type="audio/mpeg">
+</audio>
+
+
+            <div class="option">
+
+                <label>Tema:</label>
+
+                <select id="theme" onchange="changeTheme()">
+
+                    <option value="normal">
+                        Normal
+                    </option>
+
+                    <option value="dark">
+                        Oscuro
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <button class="btn menu-btn" onclick="goHome()">
+            ⬅ VOLVER
+        </button>
+
+    </section>
+
+</div>
+
+
+<!-- =====================================
+     VENTANA DE VICTORIA
+====================================== -->
+
+<div id="victoryOverlay" class="victory-overlay">
+
+    <div class="confetti-container" id="confetti"></div>
+
+    <div class="victory-card">
+
+        <div class="trophy">
+            🏆
+        </div>
+
+        <h2>
+            ¡FELICIDADES!
+        </h2>
+
+        <h3>
+            ¡GANASTE!
+        </h3>
+
+        <p class="victory-text">
+            ¡Completaste todo el tablero!
+        </p>
+
+
+        <div class="victory-stats">
+
+            <div>
+                <span>⏱️</span>
+                <strong>Tiempo</strong>
+                <p id="victoryTime">00:00</p>
+            </div>
+
+
+            <div>
+                <span>🃏</span>
+                <strong>Movimientos</strong>
+                <p id="victoryMoves">0</p>
+            </div>
+
+
+            <div>
+                <span>🎯</span>
+                <strong>Nivel</strong>
+                <p id="victoryLevel">Fácil</p>
+            </div>
+
+        </div>
+
+
+        <p class="victory-message">
+            ¡Tu memoria estuvo increíble!
+        </p>
+
+
+        <button
+            class="btn ranking-victory-btn"
+            onclick="goToRanking()">
+
+            🏆 VER CLASIFICACIÓN
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="js/prototipo.js"></script>
+
+</body>
+</html>
